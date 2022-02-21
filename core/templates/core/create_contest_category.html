@@ -1,0 +1,92 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">List of Contests</h1>
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'edit_create_contest_category' id=0 %}" class="m-0 font-weight-bold text-primary">Add New Contests</a></h6> 
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                        <th>ID</th>
+                                          <th>Start Date/Time  </th>
+                                          
+                                          <th>Contest,Category & Sponcer</th>
+                                          
+                                          <th> # of Prize & Worth</th>
+                                          
+                                          <th> # of Winners</th>
+                                          <th> # Contest Status</th>
+                                          <th>Contest End Date/Time </th>
+                              
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+                
+                                    <tbody>
+                                        {% for p in pre %}
+                                        <tr>
+                                            <td>{{ pre.start_index|add:forloop.counter0 }}</td>
+                                                  <td>{{p.contest_start_date}}</br>{{p.contest_start_time}}</td>
+                                                  <td>{{p.category.name}}</br>Category:{{p.category.name}}|Posted On:{{p.contest_start_date}}</br>Sponsor:{{p.sponsor_id.brand_name}}</td>
+                                                  <td>{{p.type_price.price_name}} </br> Rs.{{p.total_amount}}</td>
+                                                  <td>{{p.no_winner}}</td>
+                                                  <td>{{p.status}}</td>
+                                                  <td>{{p.contest_end_date}}</br>{{p.contest_end_time}}  </td>
+                                                  <td hidden>{{p.prize_description|safe}}</td>
+                                            <td><a href="{% url 'edit_create_contest_category' p.id %}">Edit</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row justify-content-around mt-1 ">
+                        <div class="col-sm-2" >
+                        <!-- <span>
+                        {% if pre.has_previous %}
+                        <a href="?page={{pre.previous_page_number}}">Previous</a>
+                        {% endif %}
+                        <span> {{pre.number}} </span>
+                        {% if pre.has_next %}
+                        <a href="?page={{pre.next_page_number}}">Next</a>
+                        {% endif %}
+                        </span>  -->
+                        
+                        {% if pre.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            {% if pre.has_previous %}
+                              <li><a href="?page={{ pre.previous_page_number }}" class="page-link">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in pre.paginator.page_range %}
+                              {% if pre.number == i %}
+                                <li class="active"><span class="page-link">{{ i }}</span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if pre.has_next %}
+                              <li><a href="?page={{ pre.next_page_number }}" class="page-link">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                          </nav>
+                        {% endif %}
+                        </div>
+                        </div>
+               
+{% endblock content %}

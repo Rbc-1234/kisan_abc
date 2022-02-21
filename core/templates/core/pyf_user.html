@@ -1,0 +1,112 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+                    <h1 class="h3 mb-2 text-gray-800">PYF Users</h1>
+                  
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'pyfuser_edit' id=0 %}" class="m-0 font-weight-bold text-primary">Add New User</a></h6> 
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            
+                                            <th>User Name</th>
+                                            <th>Full Name</th>
+                                            <th>Email Id</th>
+                                            <th>Mobile No.</th>
+                                            <th>Action</th>
+                                            <th>Created Date/Time</th>
+                                            <th>Status</th>
+                                            <th>Edit</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for p in xpdata %}
+                                        <tr>
+                                            <td>{{ xpdata.start_index|add:forloop.counter0 }}</td>
+                                            <td>{{p.name}}</td>
+                                            <td>{{p.full_name}}</td>
+                                            <td>{{p.email}}</td>
+                                            <td>{{p.mobile_no}}</td>
+                                            <td>{{p.status}}</td>
+                                            <td>{{p.created_at}}</td>
+                                            <td>
+                                              {% if p.status == 'Inactive' %}
+                                              <button type="button" id="myInput2" value="">Activated</button> 
+                                              {%elif p.status == 'Active'%}
+                                              <button type="button" id="myInput2" value="">Blocked</button>
+                                            {%endif%}
+                                            </td>
+                                            <td>Edit</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row justify-content-around mt-1 ">
+                        <div class="col-sm-2" >
+                        <!-- <span>
+                        {% if pre.has_previous %}
+                        <a href="?page={{pre.previous_page_number}}">Previous</a>
+                        {% endif %}
+                        <span> {{pre.number}} </span>
+                        {% if pre.has_next %}
+                        <a href="?page={{pre.next_page_number}}">Next</a>
+                        {% endif %}
+                        </span>  -->
+                        
+                        {% if xpdata.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            {% if xpdata.has_previous %}
+                              <li><a href="?page={{ xpdata.previous_page_number }}" class="page-link">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in xpdata.paginator.page_range %}
+                              {% if xpdata.number == i %}
+                                <li class="active"><span class="page-link">{{ i }}</span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if xpdata.has_next %}
+                              <li><a href="?page={{ xpdata.next_page_number }}" class="page-link">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                          </nav>
+                        {% endif %}
+                        </div>
+                        </div>
+                
+              
+         
+{% endblock content %}
+
+{% block javascripts %}
+
+<script>
+
+  // function myChangeFunction(input1) {
+  //   var input2 = document.getElementById('myInput2');
+  //   alert(input2.value)
+  //   input2.value = input1.value;
+  // }
+  
+  
+</script>
+
+
+{% endblock javascripts %}

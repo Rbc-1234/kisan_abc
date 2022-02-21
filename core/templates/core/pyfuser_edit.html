@@ -1,0 +1,206 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Add/Edit New Sponsor Way to Success</h1>
+                    </div>  
+{{userform}}
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <form class="user" method="POST" name="myForm" enctype="multipart/form-data" onsubmit="return validateForm()">
+                                        {%csrf_token%}
+                                        <div class="form-group">
+                                            User Name
+                                            <input type="text" name="name"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="User Name"  value="{% if sponsordata.brand_name %}{{sponsordata.brand_name}}{% endif %}">
+                                               
+                                        </div>
+                                        <div class="form-group">
+                                            Full Name
+                                            <input type="text" name="full_name" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="User Full Name" value="{% if sponsorform.company_name %}{{sponsordata.company_name}}{% endif %}">
+                                                
+                                        </div>
+                                        <div class="form-group">
+                                            Email Id
+                                            <input type="email" name="email" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Email" value="{% if sponsordata.web_url %}{{sponsordata.web_url}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Mobile No.
+                                            <input type="number" name="mobile_no" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="mobile no" value="{% if sponsordata.web_url %}{{sponsordata.web_url}}{% endif %}">
+                                        </div>
+                                        <!-- <div class="form-group">
+                                          User Status
+                                          <input type="text" name="userstatus" class="form-control"
+                                              id="" 
+                                              placeholder="" value="{% if sponsordata.web_url %}{{sponsordata.web_url}}{% endif %}">
+                                      </div> -->
+                                        <div class="form-group">
+                                            Status
+                                            <input type="radio"   name="status" value="Active" checked {% if sponsordata.status == 'Active' %} checked {% endif %}/>Active
+                                            <input type="radio"  name="status" value="Inactive" {% if sponsordata.status == 'Inactive' %} checked {% endif %}/> Inactive
+                                        </div>
+                                        <div class="form-group">
+                                          Action
+                                          <select name="userstatus" id="curtainInput" >
+                                          <option value="{% if status == 'Active' %} blocked {%endif%}">Blocked</option>
+                                          <option value="{% if status == 'inactive' %} activated {%endif%}">Activated</option>
+                                          </select>
+                                          </div>
+                                        <input type="submit" value="Add a New Category" class="btn btn-primary btn-block">
+                                      
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                
+                <!-- /.container-fluid -->
+
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+</body>
+
+</html>
+{% endblock content %}
+
+{% block javascripts %}
+
+
+<script language="javascript" type="text/javascript"></script>
+<!-- <script>
+document.getElementById("curtainInput").addEventListener(
+  "click",
+  function(event) {
+    if (event.target.value === "Blocked") {
+      event.target.value = "Activated";
+    } else {
+      event.target.value = "Blocked";
+    }
+  },
+  false
+);
+</script> -->
+ <!-- <script>
+  function validateForm() { 
+   
+    let a = document.forms["myForm"]["brand_name"].value;
+    let b = document.forms["myForm"]["company_name"].value;
+    let c = document.forms["myForm"]["web_url"].value;
+    let d = document.forms["myForm"]["address"].value;
+    let e = document.forms["myForm"]["state"].value;
+    let f = document.forms["myForm"]["country"].value;
+    let g = document.forms["myForm"]["company_phone"].value;
+    let h = document.forms["myForm"]["company_gst"].value;
+    let i = document.forms["myForm"]["company_logo"].value;
+    let j = document.forms["myForm"]["person_name"].value;
+    let k = document.forms["myForm"]["person_designation"].value;
+    let l = document.forms["myForm"]["person_mobile"].value;
+    let m = document.forms["myForm"]["person_mail"].value;
+      
+    if (a == "") {
+      alert("The brand name field is required.");
+      return false;
+    }
+    if (b == "") {
+      alert("The company name field is required.");
+      return false;
+    }
+    if (c == "") {
+        alert("The website url field is required.");
+        return false;
+    }
+    if (d == "") {
+      alert("The address field is required.");
+      return false;
+    }
+    if (e == "") {
+      alert("The state field is required.");
+      return false;
+    }
+    if (f == "") {
+      alert("The country field is required.");
+      return false;
+    }
+    if (g == "") {
+      alert("The company phone number field is required.");
+      return false;
+    }
+    
+    if (h == "") {
+      alert("The company gst/ vat number field is required.");
+      return false;
+    }
+    if (i == "" && document.getElementById("logoone") == null) {
+      alert("The logo field is required.");
+      return false;
+    }
+    if (j == "") {
+      alert("The full name field is required.");
+      return false;
+    }
+    if (k == "") {
+      alert("The designation field is required.");
+      return false;
+    }
+    if (l == "") {
+      alert("The mobile number field is required.");
+      return false;
+    }
+    if (l.length < 10 || l.length > 10) {
+    alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+    return false;
+  }
+    if (m == "") {
+      alert("The email field is required.");
+      return false;
+    }
+    
+  } -->
+
+
+   
+
+<!-- </script> -->
+  
+{% endblock javascripts %}
+
+
+
+
