@@ -36,7 +36,8 @@
                                             <td>
                                               <!-- {%if p.is_user_verified %}<input type="button" value="Verified">{% else %}<input type="button" value="Not Verified">{%endif%} -->
                                             
-                                              <a href="#" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" class="btn btn btn-success" value="Verified">{% else %}<input type="button" class="btn btn btn-danger" value="Not Verified">{%endif%}</a>
+                                              <a href="#" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" class="btn btn-success" value="Verified">{% else %}<input type="button" class="btn btn btn-danger" value="Not Verified">{%endif%} </a>
+                                                
                                               <div class="container">
                                                 <!-- <h2>Modal Example</h2> -->
                                                 <!-- Trigger the modal with a button -->
@@ -58,12 +59,18 @@
                                                         <strong>User Email:</strong> {{p.email}}
 
                                                         {%else%}
-                                                        <strong>User Email:</strong> {{p.email}}
+                                                        <strong>User Email:</strong> 
+                                                        <form method="POST" >
+                                                          {% csrf_token %}
+                                                        {{p.email}}
+                                                        
                                                       </br></br>
-                                                        <strong>Send Verification Email:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Send Email" class="btn btn-primary">
+                                                        <strong>Send Verification Email:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="submit" value="submit" class="btn btn-primary">
                                                        {%endif%}
+                                                      </form>
                                                        </div>
                                                       </div>
+                                                    
                                                       <div class="modal-footer">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                       </div>
@@ -73,7 +80,7 @@
                                                 </div>
                                               </div>
                                             </td>
-                                            <td><div id="ccnumber">{{p.mobile_no}}</div></td>
+                                            <td>{{p.mobile_no}}</td>
                                             <td>{% if p.user_status == 0 %}Activated{%else%}Blocked{%endif%}</td>
                                             <td>{{p.created_at}}</td>
                                             <td>
@@ -139,6 +146,8 @@
 {% block javascripts %}
 
 <script>
+const encryptedNumber = require ('encrypt-phone-number')
+
 
  function statusChange(event) {
   var btnvl=document.getElementById('myInput2').value
@@ -167,11 +176,28 @@
       });
  }
 
- $('#ccnumber').text(function(_, val) {
-  return val.replace(/\d{6}(\d{4})/, "******$1");
-});
+
 
 </script>
 
+
+<!-- <script>
+$(".send_mail_verification").on("click", function() {
+            // console.log(e);
+            console.log("open modal");
+            console.log("url", $(this).attr("data-target"));
+            $('#exampleModalToggle').modal('show');
+            deleteUrl = $(this).attr("data-url")
+            $('#entry-all-manual-btn-success').on("click", function(){
+                // console.log("Btn success for deletion...");
+                    $.ajax({
+                        url: deleteUrl,
+                        success: function(){
+                            location.reload()
+                        }
+                    });
+            });
+        });
+</script> -->
 
 {% endblock javascripts %}

@@ -2,7 +2,7 @@ from core import views
 from django.urls import path
 
 
-from .views import Home,Contest_data,Contestcategory_edit,Create_Contest,Createcontestcategory_edit,Sponcer_Home,Sponsor_edit,Contest_Prize,Contest_Prize_Edit,User_logout,PYF_Users_Home,PYF_Users_Edit
+from .views import Home,Contest_data,Contestcategory_edit,Create_Contest,Createcontestcategory_edit,Sponcer_Home,Sponsor_edit,Contest_Prize,Contest_Prize_Edit,User_logout,PYF_Users_Home,PYF_Users_Edit,form
 urlpatterns = [
    
     path('',Home.as_view(),name="index"),
@@ -17,6 +17,6 @@ urlpatterns = [
     path('pyf_user', PYF_Users_Home.as_view(), name='pyf_user'),
     path('pyfuser_edit/<int:id>/', PYF_Users_Edit.as_view(), name='pyfuser_edit'),
     path('logout', User_logout.as_view(), name='logout'),
-
+    path('pyf_user', views.form, name='pyf_user'),
     path('statusChangeUser', views.statusChangeUser, name='statusChangeUser')
 ]

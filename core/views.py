@@ -6,6 +6,9 @@ from .models import contest_category,contests,contest_price_list,contest_sponsor
 from .forms import Contestcategory_Form,Create_Contest_Form,Sponcers_Form,Contest_Prize_Form,PYF_Form
 import os
 from django.shortcuts import render,redirect
+from django.core.mail import EmailMessage
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 # Create your views here.
 
 class Home(View):
@@ -341,7 +344,18 @@ class PYF_Users_Edit(View):
                 else:
                     return render(requests,'core/pyfuser_edit.html',{'userform':userform})
         
-        
+def form(request):
+    if request.method =="POST":
+        list_for_random = range(100000)
+        # ry=users.objects.all()
+        # print(ry)
+        to=request.POST.get('toemail')
+        html_content=render_to_string("core/main.html",{'list_for_random':list_for_random})
+        text_content=strip_tags(html_content)
+        email=EmailMultiAlternatives("testing",text_content,settings.EMAIL_HOST_USER,[to])
+        email.attach_alternative(html_content,"text/html")
+        email.send()
+    return redirect('/pyf_user')    
 
 
 
