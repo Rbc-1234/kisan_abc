@@ -1,0 +1,167 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Add/Edit New Category</h1>
+                    </div>  
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <div class="col-lg-6">
+
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <form class="user" method="POST" name="myForm" onsubmit="return validateForm()">
+                                        {%csrf_token%}
+                                        <div class="form-group">
+                                            Category Name
+                                            <input type="text" name="name"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter Category Name..." value="{% if data.name %}{{data.name}}{% endif %}">
+                                                The name is how it appears on your site.
+                                        </div>
+                                        <div class="form-group">
+                                            Slug
+                                            <input type="text" name="slug" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter Slug Name..." value="{% if data.slug %}{{data.slug}}{% endif %}">
+                                                The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.
+                                        </div>
+                                        <div class="form-group">
+                                            Category Color
+                                            
+                                  
+                                            <div id="simple-color-picker" class="form-group input-group colorpicker-element" style="margin-bottom: 0rem;">
+                                                {% if data.color%}
+                                                <input type="text"   name="color" id="myInput2" placeholder="Select Category Color" class="form-control" value="{% if data.color %}{{data.color}}{% endif %}">
+                                                {%else%}
+                                                <input type="text"   name="color" id="myInput2" value="#ff0000" placeholder="Select Category Color" class="form-control">
+                                                {%endif%}
+                                                <span class="input-group-addon customColorInput">
+                                                    {% if data.color%}
+                                                    <input type="color" name="color"  placeholder="color" id="myInput1"  onchange="myChangeFunction(this)" value="{% if data.color %}{{data.color}}{% endif %}">
+                                                    {%else%}
+                                                    <input type="color" name="color"  id="myInput1"  value="#ff0000" onchange="myChangeFunction(this)">
+                                                    {%endif%}
+                                                </span>
+                                                
+                                              </div>
+                                                
+                                        </div>
+                                        <div class="form-group">
+                                            Parent
+                                            <input type="number" name="parent_id"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Select Category..." value="{% if data.parent_id %}{{data.parent_id}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Description
+                                          
+                                            <textarea  class="form-control" id="editor1" aria-describedby="emailHelp"  name="description"  rows="4" cols="50">{% if data.description %}{{data.description}}{% endif %}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            Status
+                                            
+                                                <input type="radio" value="active" name="masterstatus"  {% if data.masterstatus != 'inactive' %} checked {% endif %}/>Active
+                                                <input type="radio" value="inactive" name="masterstatus" {% if data.masterstatus != 'active' %} checked {% endif %}/>In Active
+                                        </div>
+                                       
+                                        <input type="submit" value="Add a New Category" class="btn btn-primary btn-block">
+                                      
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+</body>
+
+</html>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://cdn.ckeditor.com/4.17.1/standard-all/ckeditor.js"></script>
+
+<script language="javascript" type="text/javascript"></script>
+
+<script>
+  function validateForm() {
+    let x = document.forms["myForm"]["parent_id"].value;
+      let a = document.forms["myForm"]["name"].value;
+      let b = document.forms["myForm"]["slug"].value;
+    //   let c = document.forms["myForm"]["color"].value;
+      let d = document.forms["myForm"]["description"].value;
+      let g = document.forms["myForm"]["masterstatus"].value;
+      
+    if (a == "") {
+      alert("Name is blank");
+      return false;
+    }
+    if (b == "") {
+      alert("Slug is blank");
+      return false;
+    }
+    // if (c == "") {
+    //   alert("Color is blank");
+    //   return false;
+    // }
+    if (x == "") {
+      alert("Parent id is blank");
+      return false;
+    }
+    if (d == "") {
+      alert("Description is blank");
+      return false;
+    }
+ 
+    
+  }
+  
+  CKEDITOR.replace( 'editor1', {
+					fullPage: true,
+					extraPlugins: 'docprops',
+					allowedContent: true,
+					height: 250
+				} );
+
+    function myChangeFunction(input1) {
+        var input2 = document.getElementById('myInput2');
+        input2.value = input1.value;
+        }
+</script>
+  
+{% endblock javascripts %}
+
+
+
+

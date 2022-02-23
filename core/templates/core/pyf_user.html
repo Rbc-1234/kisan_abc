@@ -1,0 +1,177 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+                    <h1 class="h3 mb-2 text-gray-800">PYF Users</h1>
+                  
+                    <div class="card shadow mb-4">
+                        {% csrf_token %}
+                        <div class="card-header py-3">
+                          <h5>User List [Total Users : {{ xpdata.paginator.count }}]</h5>
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'pyfuser_edit' id=0 %}" class="m-0 font-weight-bold text-primary"></a></h6> 
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            
+                                            <th>User Name</th>
+                                            <th>Full Name</th>
+                                            <th>Email Id</th>
+                                            <th>Mobile No.</th>
+                                            <th>User Status</th>
+                                            <th>Created Date/Time</th>
+                                            <th>Button</th>
+                                            <th>Edit</th>
+                                            <th style="display: none;">user_id</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for p in xpdata %}
+                                        <tr>
+                                            <td>{{ xpdata.start_index|add:forloop.counter0 }}</td>
+                                            <td>{{p.name}}</td>
+                                            <td>{{p.full_name}}</td>
+                                            <td>
+                                              <!-- {%if p.is_user_verified %}<input type="button" value="Verified">{% else %}<input type="button" value="Not Verified">{%endif%} -->
+                                            
+                                              <a href="#" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" class="btn btn btn-success" value="Verified">{% else %}<input type="button" class="btn btn btn-danger" value="Not Verified">{%endif%}</a>
+                                              <div class="container">
+                                                <!-- <h2>Modal Example</h2> -->
+                                                <!-- Trigger the modal with a button -->
+                                                <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> -->
+                                              
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="myModal_{{p.id}}" role="dialog">
+                                                  <div class="modal-dialog">
+                                                  
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"><strong>User Email Information</strong>   &times;</button>
+                                                        <h4 class="modal-title"></h4>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        
+                                                        {%if p.is_user_verified %}
+                                                        <strong>User Email:</strong> {{p.email}}
+
+                                                        {%else%}
+                                                        <strong>User Email:</strong> {{p.email}}
+                                                      </br></br>
+                                                        <strong>Send Verification Email:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Send Email" class="btn btn-primary">
+                                                       {%endif%}
+                                                       </div>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                      </div>
+                                                    </div>
+                                                    
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td><div id="ccnumber">{{p.mobile_no}}</div></td>
+                                            <td>{% if p.user_status == 0 %}Activated{%else%}Blocked{%endif%}</td>
+                                            <td>{{p.created_at}}</td>
+                                            <td>
+                                              {% if p.user_status == 0 %}
+                                              <button type="button" id="myInput2" value="ac" class="status_change_button" onclick="statusChange($(this))">Blocked</button> 
+                                              {%elif p.user_status == 1 %}
+                                              <button type="button" id="myInput2" value="bc" class="status_change_button" onclick="statusChange($(this))">Activate</button>
+                                            {%endif%}
+                                            </td>
+                                            <td>Edit</td>
+                                            <td style="display: none;" value="{{p.id}}">{{p.id}}</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row justify-content-around mt-1 ">
+                        <div class="col-sm-2" >
+                        <!-- <span>
+                        {% if pre.has_previous %}
+                        <a href="?page={{pre.previous_page_number}}">Previous</a>
+                        {% endif %}
+                        <span> {{pre.number}} </span>
+                        {% if pre.has_next %}
+                        <a href="?page={{pre.next_page_number}}">Next</a>
+                        {% endif %}
+                        </span>  -->
+                        
+                        {% if xpdata.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            {% if xpdata.has_previous %}
+                              <li><a href="?page={{ xpdata.previous_page_number }}" class="page-link">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in xpdata.paginator.page_range %}
+                              {% if xpdata.number == i %}
+                                <li class="active"><span class="page-link">{{ i }}</span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if xpdata.has_next %}
+                              <li><a href="?page={{ xpdata.next_page_number }}" class="page-link">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                          </nav>
+                        {% endif %}
+                        </div>
+                        </div>
+                
+              
+         
+{% endblock content %}
+
+{% block javascripts %}
+
+<script>
+
+ function statusChange(event) {
+  var btnvl=document.getElementById('myInput2').value
+  if(btnvl == 'ac'){
+    alert('Are you sure want to Blocked this User?')
+  }else{
+    alert('Are you sure want to Activate this User?')
+  }
+   console.log('event', event);
+    thisObj = event;
+    trObj = thisObj.closest('tr');
+    userId = trObj.find('td:last').text();
+    const body = {}
+    body['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").val();
+    body['userId'] = userId
+    console.log('body', body);
+    $.ajax({
+      method: "POST",
+      url: '../statusChangeUser',
+      data: body,
+      }).done( function(response){
+          console.log('success');
+          location.reload();
+      }).fail( function(response){
+          console.log('failed');
+      });
+ }
+
+ $('#ccnumber').text(function(_, val) {
+  return val.replace(/\d{6}(\d{4})/, "******$1");
+});
+
+</script>
+
+
+{% endblock javascripts %}
