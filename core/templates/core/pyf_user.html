@@ -1,14 +1,61 @@
 {% extends 'core/base.html' %}
 {% block content %}
 {% load static %}
+<h5 class="h5 mb-2 text-gray-800">User List [Total Users : {{ pre.paginator.count }}]</h5>
                     <h1 class="h3 mb-2 text-gray-800">PYF Users</h1>
-                  
-                    <div class="card shadow mb-4">
-                        {% csrf_token %}
-                        <div class="card-header py-3">
-                          <h5>User List [Total Users : {{ xpdata.paginator.count }}]</h5>
-                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'pyfuser_edit' id=0 %}" class="m-0 font-weight-bold text-primary"></a></h6> 
+                    <form method="get" >
+                    <div class="row">
+                      <div class="col-md-2">
+                      
+                        <div class="form-group">
+                          Start Date:
+                          <input type="date" name="searchname" class="form-control" value="{{st}}">
                         </div>
+                        </div>
+                        
+                          <div class="col-md-2">
+                            <div class="form-group">
+                          End Date:
+                          <input type="date" name="searchend" value="{{mt}}" class="form-control">
+                          </div>
+                          </div>
+                          
+                          
+                            <div class="col-md-2">
+                              <div class="form-group">
+                          User Name:
+                          <input type="Text" name="username" value="{{rt}}" class="form-control">
+                          </div>
+                          </div>
+                        
+                        
+                          <div class="col-md-2">
+                            <div class="form-group">
+                          Select By:
+                          <Select class="form-control" name="searchh">
+                            <option value="">Select</option>
+                            
+                            <option value="{% if is_user_verified %}0{%else%}1{%endif%}"{% if is_user_verified == gt %} selected="selected" {% endif %}>Verified</option>
+                            <option value="{% if is_user_verified %}1{%else%}0{%endif%}"{% if is_user_verified == gt %} selected="selected" {% endif %}>Not Verified</option>
+                            
+      
+                          </Select>
+                        </div>
+                      </div>
+                    
+                      <div class="col-md-1">
+                        <div class="form-group">
+                        </br>
+                          <Button type="submit"  value="Filter"class="btn btn-primary"> <i class="fa fa-filter" aria-hidden="true"></i>Filter</Button>
+                      
+                    </div>
+                  </div>
+                    </div>
+                    </form>
+                            <!-- <option value="{%if p.is_user_verified %}Verified{%else%}Not Verified{%endif%}"> {%if pre.is_user_verified %}Verified{% else %}Not Verified{%endif%}</option> -->
+                          
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'pyfuser_edit' id=0 %}" class="m-0 font-weight-bold text-primary"></a></h6> 
+                      
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -22,21 +69,21 @@
                                             <th>Mobile No.</th>
                                             <th>User Status</th>
                                             <th>Created Date/Time</th>
-                                            <th>Button</th>
-                                            <th>Edit</th>
+                                            <th>Actions</th>
+                                            
                                             <th style="display: none;">user_id</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for p in xpdata %}
+                                        {% for p in pre %}
                                         <tr>
-                                            <td>{{ xpdata.start_index|add:forloop.counter0 }}</td>
+                                            <td>{{ pre.start_index|add:forloop.counter0 }}</td>
                                             <td>{{p.name}}</td>
                                             <td>{{p.full_name}}</td>
                                             <td>
                                               <!-- {%if p.is_user_verified %}<input type="button" value="Verified">{% else %}<input type="button" value="Not Verified">{%endif%} -->
                                             
-                                              <a href="#" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" class="btn btn-success" value="Verified">{% else %}<input type="button" class="btn btn btn-danger" value="Not Verified">{%endif%} </a>
+                                              <a href="#" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" name="is_user_verified" class="btn btn-success" name="is_user_verified" value="Verified">{% else %}<input type="button" class="btn btn btn-danger" name="is_user_verified"  value="Not Verified">{%endif%} </a>
                                                 
                                               <div class="container">
                                                 <!-- <h2>Modal Example</h2> -->
@@ -80,17 +127,20 @@
                                                 </div>
                                               </div>
                                             </td>
-                                            <td>{{p.mobile_no}}</td>
-                                            <td>{% if p.user_status == 0 %}Activated{%else%}Blocked{%endif%}</td>
+                                            <td>
+                                              <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                                              <p style="position:relative;">{{p.mobile_no}}</p></td>
+
+                                            <td>{% if p.user_status == 0 %}<i class="fa fa-unlock fa-lg" style="color:green">Activated</i>{%else%}<i class="fa fa-lock fa-lg" style="color:red">Blocked</i>{%endif%}</td>
                                             <td>{{p.created_at}}</td>
                                             <td>
                                               {% if p.user_status == 0 %}
-                                              <button type="button" id="myInput2" value="ac" class="status_change_button" onclick="statusChange($(this))">Blocked</button> 
+                                              <a class="view" href="{% url 'pyfuser_edit' p.id %}"><i class="fa fa-eye fa-lg"></i><a herf="#" id="myInput2" value="ac" class="status_change_button" onclick="statusChange($(this))"><i class="fa fa-ban"></i>Blocked</a>
                                               {%elif p.user_status == 1 %}
-                                              <button type="button" id="myInput2" value="bc" class="status_change_button" onclick="statusChange($(this))">Activate</button>
+                                              <a href="{% url 'pyfuser_edit' p.id %}"><i class="fa fa-eye fa-lg"></i><a herf="#" id="myInput2" value="ab" class="status_change_button" onclick="statusChange($(this))"><i class="fa fa-unlock fa-lg"></i>Activate</a>
                                             {%endif%}
                                             </td>
-                                            <td>Edit</td>
+                                            
                                             <td style="display: none;" value="{{p.id}}">{{p.id}}</td>
                                         </tr>
                                         {%endfor%}
@@ -113,23 +163,23 @@
                         {% endif %}
                         </span>  -->
                         
-                        {% if xpdata.has_other_pages %}
+                        {% if pre.has_other_pages %}
                         <nav aria-label="Page navigation example">
                           <ul class="pagination">
-                            {% if xpdata.has_previous %}
-                              <li><a href="?page={{ xpdata.previous_page_number }}" class="page-link">&laquo;</a></li>
+                            {% if pre.has_previous %}
+                              <li><a href="?page={{ pre.previous_page_number }}&searchname={{st}}&searchh={{gt}}&username={{rt}}&searchend={{mt}}" class="page-link">&laquo;</a></li>
                             {% else %}
                               <li class="disabled"><span>&laquo;</span></li>
                             {% endif %}
-                            {% for i in xpdata.paginator.page_range %}
-                              {% if xpdata.number == i %}
+                            {% for i in pre.paginator.page_range %}
+                              {% if pre.number == i %}
                                 <li class="active"><span class="page-link">{{ i }}</span></li>
                               {% else %}
-                                <li><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                                <li><a href="?page={{ i }}&searchname={{st}}&searchh={{gt}}&username={{rt}}&searchend={{mt}}" class="page-link">{{ i }} </a></li>
                               {% endif %}
                             {% endfor %}
-                            {% if xpdata.has_next %}
-                              <li><a href="?page={{ xpdata.next_page_number }}" class="page-link">&raquo;</a></li>
+                            {% if pre.has_next %}
+                              <li><a href="?page={{ pre.next_page_number }}&searchname={{st}}&searchh={{gt}}&username={{rt}}&searchend={{mt}}" class="page-link">&raquo;</a></li>
                             {% else %}
                               <li class="disabled"><span>&raquo;</span></li>
                             {% endif %}
@@ -146,16 +196,18 @@
 {% block javascripts %}
 
 <script>
-const encryptedNumber = require ('encrypt-phone-number')
+
 
 
  function statusChange(event) {
-  var btnvl=document.getElementById('myInput2').value
-  if(btnvl == 'ac'){
-    alert('Are you sure want to Blocked this User?')
-  }else{
-    alert('Are you sure want to Activate this User?')
-  }
+  var bla = $('#myInput2').val();
+  alert(bla)
+  // if(btnvl == 'ac'){
+  //   alert('Are you sure want to Blocked this User?')
+  // }else{
+  //   alert('Are you sure want to Activate this User?')
+  // }
+  
    console.log('event', event);
     thisObj = event;
     trObj = thisObj.closest('tr');
@@ -173,13 +225,17 @@ const encryptedNumber = require ('encrypt-phone-number')
           location.reload();
       }).fail( function(response){
           console.log('failed');
-      });
+      }); 
  }
 
 
 
 </script>
+<script>
+var mask = '<span style="position:absolute; top:0; left:0; background-color:white;">* ** * **</span>';
 
+$("p").append(mask);
+  </script>
 
 <!-- <script>
 $(".send_mail_verification").on("click", function() {

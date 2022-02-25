@@ -1,0 +1,94 @@
+
+{% block content %}
+
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Enquiry Information</h1>
+                    </div>  
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <form class="user" method="GET" name="myForm" enctype="multipart/form-data" onsubmit="return validateForm()">
+                                      
+                                        <div class="form-group">
+                                            Name  
+                                            <input type="Text" class="form-control" name="name"  placeholder="" value="{% if pre.name %} {{pre.name}} {% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Email
+                                            
+                                            <input type="email" name="email"class="form-control"
+                                                id="exampleInputEmail" value="{% if pre.email %} {{pre.email}} {% endif %}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            Phone
+                                            <input type="text" name="phone"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder=""  value="{% if pre.phone %} {{pre.phone}} {% endif %}">
+                                               
+                                        </div>
+                                        <div class="form-group">
+                                            Country
+                                            <input type="text" name="country" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="" value="{% if pre.country %} {{pre.country}} {% endif %}">
+                                                
+                                        </div>
+                                        <div class="form-group">
+                                            Message
+                                            <input type="text" name="message" class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="" value="{% if pre.message %} {{pre.message}} {% endif %}">
+                                         
+                                        </div>
+                                        <div class="form-group">
+                                            Created Date/Time
+                                            <input type="text" name="created" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="" value="{% if pre.created %} {{pre.created}} {% endif %}">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                
+                <!-- /.container-fluid -->
+
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+</body>
+
+</html>
+{% endblock content %}
+
+
+
+

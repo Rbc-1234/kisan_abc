@@ -9,9 +9,8 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Add/Edit New Sponsor Way to Success</h1>
+                        <h1 class="h3 mb-0 text-gray-800">View User Detail</h1>
                     </div>  
-{{userform}}
                     <!-- Content Row -->
                     <div class="row">
 
@@ -22,50 +21,72 @@
                                     <form class="user" method="POST" name="myForm" enctype="multipart/form-data" onsubmit="return validateForm()">
                                         {%csrf_token%}
                                         <div class="form-group">
+                                          
+                                          Profile Pic
+                                         
+                                         <img src="{% if xpdata.profile_pic%}{{xpdata.profile_pic.url}}{%endif%}">{{xpdata.profile_pic}}</img>
+                                             
+                                      </div>
+                                        <div class="form-group">
+                                          
                                             User Name
+                                           
                                             <input type="text" name="name"class="form-control"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="User Name"  value="{% if sponsordata.brand_name %}{{sponsordata.brand_name}}{% endif %}">
+                                                placeholder="User Name"  value="{% if xpdata.name %}{{xpdata.name}}{% endif %}">
                                                
                                         </div>
                                         <div class="form-group">
                                             Full Name
                                             <input type="text" name="full_name" class="form-control"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="User Full Name" value="{% if sponsorform.company_name %}{{sponsordata.company_name}}{% endif %}">
+                                                placeholder="User Full Name" value="{% if xpdata.full_name %}{{xpdata.full_name}}{% endif %}">
                                                 
                                         </div>
                                         <div class="form-group">
                                             Email Id
                                             <input type="email" name="email" class="form-control"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Email" value="{% if sponsordata.web_url %}{{sponsordata.web_url}}{% endif %}">
+                                                placeholder="Email" value="{% if xpdata.email %}{{xpdata.email}}{% endif %}">
                                         </div>
                                         <div class="form-group">
                                             Mobile No.
                                             <input type="number" name="mobile_no" class="form-control"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="mobile no" value="{% if sponsordata.web_url %}{{sponsordata.web_url}}{% endif %}">
-                                        </div>
-                                        <!-- <div class="form-group">
-                                          User Status
-                                          <input type="text" name="userstatus" class="form-control"
-                                              id="" 
-                                              placeholder="" value="{% if sponsordata.web_url %}{{sponsordata.web_url}}{% endif %}">
-                                      </div> -->
-                                        <div class="form-group">
-                                            Status
-                                            <input type="radio"   name="status" value="Active" checked {% if sponsordata.status == 'Active' %} checked {% endif %}/>Active
-                                            <input type="radio"  name="status" value="Inactive" {% if sponsordata.status == 'Inactive' %} checked {% endif %}/> Inactive
+                                                placeholder="" value="{% if xpdata.mobile_no %}{{xpdata.mobile_no}}{% endif %}">
                                         </div>
                                         <div class="form-group">
-                                          Action
-                                          <select name="userstatus" id="curtainInput" >
-                                          <option value="{% if status == 'Active' %} blocked {%endif%}">Blocked</option>
-                                          <option value="{% if status == 'inactive' %} activated {%endif%}">Activated</option>
-                                          </select>
-                                          </div>
-                                        <input type="submit" value="Add a New Category" class="btn btn-primary btn-block">
+                                          DOB
+                                          <input type="date" name="dob" class="form-control"
+                                              id="exampleInputEmail" aria-describedby="emailHelp"
+                                              placeholder="" value="{{userform.dob.value | date:'c'}}">
+                                      </div>
+                                      <div class="form-group">
+                                        Gender
+                                        <input type="text" name="gender" class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="" value="{% if xpdata.gender %}{{xpdata.gender}}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                      Address
+                                      <input type="text" name="city" class="form-control"
+                                          id="exampleInputEmail" aria-describedby="emailHelp"
+                                          placeholder="" value="{% if xpdata.city %}{{xpdata.city}}{% endif %}">
+                                  </div>
+                                  <div class="form-group">
+                                    Email Verified
+                                    <tr><td>
+                                      {%if xpdata.is_user_verified %}<i class="fa fa-check fa-lg" style="color:green">Verified</i>{% else %}<i class="fa fa-times fa-lg" style="color:red ">Not Verified</i>{%endif%}
+                                      </td>
+                                      </tr>
+                                </div>
+                                <div class="form-group">
+                                  Status
+                                  <tr><td>
+                                    {% if xpdata.user_status == 0 %}<i class="fa fa-unlock fa-lg" style="color:green">Activated</i>{%else%}<i class="fa fa-lock fa-lg" style="color:red">Blocked</i>{%endif%}
+                                    </td>
+                                    </tr>
+                              </div>
                                       
                                     </form>
                                 </div>

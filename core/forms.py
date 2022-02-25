@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import users,contest_category,contests,contest_sponsor,contest_price_list
+from .models import users,contest_category,contests,contest_sponsor,contest_price_list,blog,reachus
 from django import forms
 
 
@@ -28,3 +28,14 @@ class PYF_Form(forms.ModelForm):
     class Meta:
         model = users
         fields = '__all__'
+
+class Blog_Form(forms.ModelForm):
+    class Meta:
+        model = blog
+        fields = '__all__'
+
+class Reach_Form(forms.ModelForm):
+    class Meta:
+        model = reachus
+        fields = '__all__'
+        

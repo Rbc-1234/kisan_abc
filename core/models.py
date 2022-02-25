@@ -30,10 +30,10 @@ class become_sponsor(models.Model):
 
 class blog(models.Model):
     id=models.AutoField(primary_key=True)
-    title=models.TextField()
+    title=models.TextField(default=None)
     titleSlag=models.TextField()
-    image=models.CharField(max_length=255, null=True)
-    s_description=models.TextField()
+    image=models.FileField(default=None)
+    s_description=models.TextField(default=None,blank=True,null=True)
     description=models.TextField()
     meta_title=models.TextField()
     meta_desc=models.TextField()

@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.views import View
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-from .models import contest_category,contests,contest_price_list,contest_sponsor,users
-from .forms import Contestcategory_Form,Create_Contest_Form,Sponcers_Form,Contest_Prize_Form,PYF_Form
+from .models import contest_category,contests,contest_price_list,contest_sponsor,users,blog,reachus
+from .forms import Contestcategory_Form,Create_Contest_Form,Sponcers_Form,Contest_Prize_Form,PYF_Form,Blog_Form,Reach_Form
 import os
 from django.shortcuts import render,redirect
 from django.core.mail import EmailMessage
@@ -311,11 +311,65 @@ class Contest_Prize_Edit(View):
 
 class PYF_Users_Home(View):
     def get(self,requests):
-        pre=users.objects.all()
-        paginator=Paginator(pre,5)
-        page_number=requests.GET.get('page')
-        xpdata = paginator.get_page(page_number)
-        return render(requests,'core/pyf_user.html',{'xpdata':xpdata})
+        pre=users.objects.all().order_by('-id')
+        # print(pre)
+        st=''
+        rt=''
+        gt=''
+        mt=''
+        if requests.GET.get('searchname'):
+            st=requests.GET.get('searchname')
+        if requests.GET.get('username'):
+            rt=requests.GET.get('username')
+        if requests.GET.get('searchh'):
+            gt=requests.GET.get('searchh')  
+        
+        if requests.GET.get('searchend'):
+            mt=requests.GET.get('searchend') 
+            # print(mt)
+
+
+        if ((rt!='')and(st!='')and(gt!='')):
+            pre=users.objects.filter(created_at__icontains=st,name__icontains=rt,is_user_verified=gt)
+            paginator= Paginator(pre,9 )
+            page_number=requests.GET.get('page')
+            pre = paginator.get_page(page_number)
+            return render(requests,'core/pyf_user.html',{'pre':pre,'st':st,'gt':gt,'rt':rt,'mt':mt})
+        elif ((st!='') and (mt!='')):
+            pre=users.objects.filter(created_at__range=(st,mt))
+            paginator= Paginator(pre,9 )
+            page_number=requests.GET.get('page')
+            pre = paginator.get_page(page_number)
+            return render(requests,'core/pyf_user.html',{'pre':pre,'st':st,'gt':gt,'rt':rt,'mt':mt})
+
+        elif st!='':
+            pre=users.objects.filter(created_at__icontains=st)
+            paginator= Paginator(pre,9 )
+            page_number=requests.GET.get('page')
+            pre = paginator.get_page(page_number)
+            return render(requests,'core/pyf_user.html',{'pre':pre,'rt':rt, 'st':st,'gt':gt,'mt':mt})
+        elif rt!='':
+            pre=users.objects.filter(name__icontains=rt)
+            paginator= Paginator(pre,9 )
+            page_number=requests.GET.get('page')
+            pre = paginator.get_page(page_number)
+            return render(requests,'core/pyf_user.html',{'pre':pre,'st':st,'rt':rt,'gt':gt,'mt':mt})
+        elif gt!='':
+            pre=users.objects.filter(is_user_verified=gt)
+            paginator= Paginator(pre,9 )
+            page_number=requests.GET.get('page')
+            pre = paginator.get_page(page_number)
+            return render(requests,'core/pyf_user.html',{'pre':pre,'st':st,'rt':rt,'gt':gt,'mt':mt})
+
+        else:
+            pre=users.objects.all()
+            paginator= Paginator(pre,9)
+            page_number=requests.GET.get('page')
+            pre = paginator.get_page(page_number)
+            return render(requests,'core/pyf_user.html',{'pre':pre,'st':st,'rt':rt,'gt':gt,'mt':mt})
+
+        
+
 
 class PYF_Users_Edit(View):
     def get(self,requests,id):
@@ -324,38 +378,105 @@ class PYF_Users_Edit(View):
             return render(requests,'core/pyfuser_edit.html',{'userform':userform})
         else:
             xpdata=users.objects.get(id=id)
+            print(xpdata)
             userform=PYF_Form(instance=xpdata)
-            return render(requests,'core/pyfuser_edit.html',{'userform':userform})
+            return render(requests,'core/pyfuser_edit.html',{'userform':userform,'xpdata':xpdata})
+    # def post(self,requests,id):
+    #     if (id==0):
+    #         userform=PYF_Form(requests.POST)
+    #         print(requests.POST)
+    #         if requests.method=="POST":
+    #             if userform.is_valid():
+    #                 ac=userform.cleaned_data['name']
+    #                 ad=userform.cleaned_data['full_name']
+    #                 ae=userform.cleaned_data['email']
+    #                 aj=userform.cleaned_data['mobile_no']
+    #                 aah=userform.cleaned_data['user_status']
+                    
+    #                 usertb=users(name=ac,full_name=ad,email=ae,mobile_no=aj,status=aah)
+    #                 usertb.save()
+    #                 return redirect('/pyf_user')
+    #             else:
+    #                 return render(requests,'core/pyfuser_edit.html',{'userform':userform})
+class Blog_home(View):
+    def get(self,requests):
+        pre=blog.objects.all()
+        paginator=Paginator(pre,5)
+        page_number=requests.GET.get('page')
+        blogdata = paginator.get_page(page_number)
+        return render(requests,'core/bloghome.html',{'blogdata':blogdata})
+class Blog_Edit(View):
+    def get(self,requests,id):
+        if (id==0):
+            blogform=Blog_Form()
+            return render(requests,'core/blogedit.html',{'blogform':blogform})
+        else:
+            blogdata=blog.objects.get(id=id)
+            blogform=Blog_Form(instance=blogdata)
+            return render(requests,'core/blogedit.html',{'blogdata':blogdata})
+    
     def post(self,requests,id):
         if (id==0):
-            userform=PYF_Form(requests.POST)
+            blogform=Blog_Form(requests.POST,requests.FILES)
             print(requests.POST)
             if requests.method=="POST":
-                if userform.is_valid():
-                    ac=userform.cleaned_data['name']
-                    ad=userform.cleaned_data['full_name']
-                    ae=userform.cleaned_data['email']
-                    aj=userform.cleaned_data['mobile_no']
-                    aah=userform.cleaned_data['user_status']
-                    
-                    usertb=users(name=ac,full_name=ad,email=ae,mobile_no=aj,status=aah)
-                    usertb.save()
-                    return redirect('/pyf_user')
+                if blogform.is_valid():
+                    ab=blogform.cleaned_data['title']
+                    ac=blogform.cleaned_data['titleSlag']
+                    ad=blogform.cleaned_data['image']
+                    af=blogform.cleaned_data['description']
+                    ag=blogform.cleaned_data['meta_title']
+                    ah=blogform.cleaned_data['meta_desc']
+                    ai=blogform.cleaned_data['status']
+                    krp=blog(title=ab,titleSlag=ac,image=ad,description=af,meta_title=ag,status=ai,meta_desc=ah)
+                    krp.save()
+                    return redirect('/bloghome')
                 else:
-                    return render(requests,'core/pyfuser_edit.html',{'userform':userform})
-        
+                    return render(requests,'core/blogedit.html',{'blogform':blogform})
+
+        else:
+            blogdata=blog.objects.get(id=id)
+            print(blogdata)
+            if len(requests.FILES) !=0:
+                if len(blogdata.image)>0:
+                    os.remove(blogdata.image.path)
+                    blogdata.image=requests.FILES['image']
+            blogform=Blog_Form(requests.POST,instance=blogdata)
+            if blogform.is_valid():
+                blogform.save()
+                return redirect('/bloghome')
+            else:
+                return render(requests,'core/blogedit.html',{'blogform':blogform,'blogdata':blogdata})
+
+class Reachus_home(View):
+    def get(self,requests):
+        pre=reachus.objects.all()
+        paginator=Paginator(pre,5)
+        page_number=requests.GET.get('page')
+        blogdata = paginator.get_page(page_number)
+        return render(requests,'core/reachus_enquire_home.html',{'blogdata':blogdata})
+
+class Reachus_home_form(View):
+    def get(self,requests,id):
+        pre=reachus.objects.get(id=id)
+        print(pre)
+        userform=Reach_Form(instance=pre)
+        return render(requests,'core/reachusform.html',{'pre':pre,'userform':userform})
+
+
 def form(request):
     if request.method =="POST":
         list_for_random = range(100000)
-        # ry=users.objects.all()
-        # print(ry)
-        to=request.POST.get('toemail')
+        to=request.POST.get('csrfmiddlewaretoken')
+        print(to)
         html_content=render_to_string("core/main.html",{'list_for_random':list_for_random})
         text_content=strip_tags(html_content)
         email=EmailMultiAlternatives("testing",text_content,settings.EMAIL_HOST_USER,[to])
         email.attach_alternative(html_content,"text/html")
         email.send()
-    return redirect('/pyf_user')    
+        return redirect('/pyf_user')
+
+
 
 
 
@@ -393,7 +514,23 @@ def statusChangeUser(request):
     return JsonResponse({'message':'failed'}, status=500)
         
 
-
+def statusChangeUsers(request):
+    from django.forms.models import model_to_dict
+    print('request: ',request.POST)
+    try:
+        userId = int(request.POST['userId'])
+        userObj = blog.objects.get(id__exact=userId)
+        if userObj.status == 'Not Verified':
+            userObj.status = 'Verified'
+            userObj.save()
+        else:
+            userObj.status = 'Not Verified'
+            userObj.save()
+        print(model_to_dict(userObj))
+        return JsonResponse({'message':'success'},status=200)
+    except Exception as e:
+        print(e)
+    return JsonResponse({'message':'failed'}, status=500)
 
 
 
