@@ -1,36 +1,48 @@
 {% extends 'core/base.html' %}
 {% block content %}
-{% load static %}
-                    <h1 class="h3 mb-2 text-gray-800">Contests Prize Type List</h1>
-                  
+                    <h1 class="h3 mb-2 text-gray-800">List Of Categories</h1>
+                    <form method="get">
+                      {% csrf_token %}
+                     <div class="row">
+                       <div class="col-lg-3 pull-right">
+                         
+                     <input type="text" name="searchname" class="form-control"id=""placeholder="Search by Category Name"  value="{{rt}}"/>
+                     </div>
+                     <div class="col-lg-3 pull-right">
+                     <input type="submit" value="Go!" class="btn btn-primary"/>
+                     </d>
+                   </div>
+                     </div>
+                     
+                 </form>
                     <div class="card shadow mb-4">
                         
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'contest_prize_edit' id=0 %}" class="m-0 font-weight-bold text-primary">Add New Contest Prize Type</a></h6> 
-                        </div>
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'create-contest-category' id=0 %}" class="m-0 font-weight-bold text-primary">Add New Category</a></h6>
+                           
+                          </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Prize Name</th>
-                                            <th>Created Date/Time</th>
-                                            <th>Status</th>
+                                            <th>Name</th>
+                                            <th>Slug</th>
+                                            
                                             <th>Edit</th>
                                             
                                         </tr>
                                     </thead>
+                
                                     <tbody>
-                                        {% for p in prizedata %}
+                                        {% for p in pre %}
                                         <tr>
-                                            <td>{{ prizedata.start_index|add:forloop.counter0 }}</td>
-                                            <td>{{p.price_name}}</td>
-                                            <td>{{p.updated}}</td>
-                                            <td>{{p.status}}</td>
+                                            <td>{{ pre.start_index|add:forloop.counter0 }}</td>
+                                            <td>{{p.name}}</td>
+                                            <td>{{p.slug}}</td>
                                             
-                                             
-                                            <td><a href="{% url 'contest_prize_edit' p.id %}">Edit</td>
+                                            <td><a href="{% url 'create-contest-category' p.id %}"><i class="fas fa-pencil-alt"style="color:yellowgreen"></i></a></td>
                                         </tr>
                                         {%endfor%}
                                     </tbody>
@@ -52,23 +64,23 @@
                         {% endif %}
                         </span>  -->
                         
-                        {% if prizedata.has_other_pages %}
+                        {% if pre.has_other_pages %}
                         <nav aria-label="Page navigation example">
                           <ul class="pagination">
-                            {% if prizedata.has_previous %}
-                              <li><a href="?page={{ prizedata.previous_page_number }}" class="page-link">&laquo;</a></li>
+                            {% if pre.has_previous %}
+                              <li><a href="?page={{ pre.previous_page_number }}&searchname={{rt}}" class="page-link">&laquo;</a></li>
                             {% else %}
                               <li class="disabled"><span>&laquo;</span></li>
                             {% endif %}
-                            {% for i in prizedata.paginator.page_range %}
-                              {% if prizedata.number == i %}
+                            {% for i in pre.paginator.page_range %}
+                              {% if pre.number == i %}
                                 <li class="active"><span class="page-link">{{ i }}</span></li>
                               {% else %}
-                                <li><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                                <li><a href="?page={{ i }}&searchname={{rt}}" class="page-link">{{ i }} </a></li>
                               {% endif %}
                             {% endfor %}
-                            {% if prizedata.has_next %}
-                              <li><a href="?page={{ prizedata.next_page_number }}" class="page-link">&raquo;</a></li>
+                            {% if pre.has_next %}
+                              <li><a href="?page={{ pre.next_page_number }}&searchname={{rt}}" class="page-link">&raquo;</a></li>
                             {% else %}
                               <li class="disabled"><span>&raquo;</span></li>
                             {% endif %}
@@ -81,3 +93,4 @@
               
          
 {% endblock content %}
+

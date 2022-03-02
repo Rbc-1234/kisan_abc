@@ -124,7 +124,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <strong> No. Of Winner To be Announced</strong>
-                                                <input type="number"  name="no_winner" id="myInput3" placeholder="Number of winners" class="form-control" value="{% if data.no_winner %}{{data.no_winner}}{% endif %}">
+                                                <input type="number"  name="no_winner" id="myinput3" placeholder="Number of winners" class="form-control" value="{% if data.no_winner %}{{data.no_winner}}{% endif %}">
                                             </div>
                                             <div class="form-group">
                                                 <strong>Type of Prize</strong>
@@ -161,13 +161,12 @@
                                                 <input type="button" onclick="remove()" value="Remove More Positions"/></br>
                                                 <input type='checkbox' id="chk1" name='restAmout' onclick="restAmount()"> Equal divide Rest amount</br>
 
-                                                <span id="p_1">Position No 1 Amount</span></br>
-                                                <input type="text" id='new_1' name="reamt" value="{%if data.reamt %}{{data.reamt}}{%endif%}" class="form-control">
-                                            <div id="new_chq">
-                                                <input type="hidden" value="1" id="total_chq" class="form-control" >
-
-                                            </div>
-                                            </div> 
+                                                <span id="p_1"> First Position</span>
+                                                <input type="text" id='new_1' name="reamt" value="" class="form-control">
+                                                <div id="new_chq">
+                                                <input type="hidden" value="1" id="total_chq">
+                                                </div>
+                                                </div> 
 
                                              
                                             
@@ -188,7 +187,7 @@
                                                     <div class="form-group">
                                                        <strong> Contest Start Date</strong>
                                                         <div class="input-group">
-                                                            <input type="date" class="form-control" name="contest_start_date"value="{{formm.contest_start_date.value | date:'c'}}">
+                                                            <input type="date" class="form-control" name="contest_start_date"value="{{formm.contest_start_date.value | date:'c'}}" onchange="mydateChangeFunction(this)">
                                                             <div class="input-group-append">
                                                               <span class="input-group-text" id="basic-addon2">
                                                                 <i class="fas fa-calendar-alt"></i>
@@ -216,7 +215,7 @@
                                                     <div class="form-group">
                                                         <strong>Contest End Date</strong>
                                                         <div class="input-group">
-                                                            <input type="date" class="form-control" name="contest_end_date" value="{{formm.contest_end_date.value | date:'c'}}">
+                                                            <input type="date" class="form-control" id="conendate"name="contest_end_date" value="{{formm.contest_end_date.value | date:'c'}}">
                                                             <div class="input-group-append">
                                                               <span class="input-group-text" id="basic-addon2">
                                                                 <i class="fas fa-calendar-alt"></i>
@@ -412,8 +411,8 @@
                                     <div class="form-group">
                                     <h3><strong>Status</strong></h3></br>
                                     <strong>
-                                    <input type="radio"   name="status" value="Active" checked {% if data.status == 'Active' %} checked {% endif %}/>Active
-                                    <input type="radio"  name="status" value="Inactive" {% if data.status == 'Inactive' %} checked {% endif %}/> Inactive
+                                    <input type="radio"   name="status" value="Published" checked {% if data.status == 'Not Published' %} checked {% endif %}/>Published
+                                    <input type="radio"  name="status" value="Not Published" {% if data.status == 'Published' %} checked {% endif %}/>Not Published
                                     </strong>
                                     </div>
                                     <div class="row">
@@ -585,72 +584,52 @@ function NumToWord(inputNumber) {
 }
 
 function restAmount(){
-  let total_amt = document.getElementById('myInput1');
-  let participent_no = document.getElementById('myInput3');
-  let position_amt = document.getElementById('new_1');
+  var participent_no=$("#myinput3").val();
   if (document.getElementById("chk1").checked){
-      if (participent_no.value==""){
-          alert('Total Amount and number of winners required')
-      }
-      else if(total_amt.value==""){
-      
-        alert('Total Amount and number of winners required')
-      }
-      else if(position_amt.value==""){
-      
-      alert('Blank Amount is not allowed')
-    }
-      else{
-        for(let i=1;i<participent_no.value;i++){
-
-        add('equaldivide');
+  for(let i=0;i<participent_no;i++){
+    alert(i)
+    add('equaldivide');
+    
     
   }
 }
 }
-}
-
 
 function add(from){
-//   let total_amt = document.getElementById('myInput1');
-//   let participent_no = document.getElementById('myInput3');
+  
    let total_amount=$('#myInput1').val();
-   let participent_no=$('#myInput3').val();
-   let position_amt = document.getElementById('new_1');
-    if (total_amount==""){
-        alert('Total Amount and number of winners required')
-    }else if (participent_no==""){
-        alert('Total Amount and number of winners required')
-    }else if(position_amt.value==""){
-      
-      alert('Blank Amount is not allowed')
-    }else{
+//    let total_amount=$('#myInput1').val();
+   if(total_amount==""){
+     
+   }
    let first_po_val="";
     let total_row=$('#total_chq').val();
+    
     let total_row_sum=0;
     for(let i=1;i<=total_row;i++){
       total_row_sum = total_row_sum+parseInt($('#new_'+i).val());
+
+      
     }
-    if (total_row_sum > total_amount){
-        alert('Amount is Equal or More than Total')
-    }else{
+    // alert(total_row_sum+"="+total_amount)
     if (total_row_sum < total_amount){
 
     let new_chq_no = parseInt($('#total_chq').val())+1;
+    
     let new_chq_no_in_word=NumToWord(new_chq_no);
     if (from =='equaldivide'){
     //let first_po_val=$('#new_1').val();
-    first_po_val=total_amount-total_row_sum;
+    var participent_rest=$("#myinput3").val();
+    first_po_val=(total_amount-parseInt($('#new_1').val()))/(participent_rest-1);
+ 
     }else{
        first_po_val="";
-    }
+    } 
 
-    let new_input="<span id='p_"+new_chq_no+"'>"+new_chq_no_in_word+" Position </span><input type='text' id='new_"+new_chq_no+"' value='{%if data.reamt %}{{data.reamt}}{%endif%}' name='reamt' value='"+first_po_val+"' class='form-control'>";
+    let new_input="<span id='p_"+new_chq_no+"'>"+new_chq_no_in_word+" Position </span><input type='text'  id='new_"+new_chq_no+"' name='reamt' value='"+Math.round(first_po_val)+"' class='form-control'>";
     $('#new_chq').append(new_input);
     $('#total_chq').val(new_chq_no);
   }
-}
-}   
 }
 
 function remove(){
@@ -806,7 +785,7 @@ function remove(){
 
     if 
     (document.getElementById('positionone').checked) {
-    var input3 = document.getElementById('myInput3');
+    var input3 = document.getElementById('myinput3');
     var input5 = document.getElementById('myInput1');
         if (input3.value==""){
             alert('Please Fill Amount and No of Winners First')
@@ -904,7 +883,7 @@ function remove(){
 
 
     function myChangeFunction(input1) {
-    var input3 = document.getElementById('myInput3');
+    var input3 = document.getElementById('myinput3');
     var input2 = document.getElementById('myInput2');
    
     input2.value = Math.round(input1.value/input3.value);
@@ -912,7 +891,10 @@ function remove(){
     
   }
    
-
+  function mydateChangeFunction(input1) {
+        var input2 = document.getElementById('conendate');
+        input2.value = input1.value;
+        }
 
 
    

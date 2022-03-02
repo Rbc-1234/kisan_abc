@@ -61,7 +61,7 @@ class contest_category(models.Model):
     description=models.TextField()
     created_at= models.DateTimeField(auto_now_add=True)
     updated_at= models.DateTimeField(auto_now=True)
-    masterstatus=models.CharField(max_length=200,default=None)
+    masterstatus=models.CharField(max_length=200,default=None,null=True,blank=True)
     class Meta:
          db_table = "contest_category"
 

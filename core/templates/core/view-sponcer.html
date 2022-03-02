@@ -1,13 +1,24 @@
 {% extends 'core/base.html' %}
 {% block content %}
 {% load static %}
-                    <h1 class="h3 mb-2 text-gray-800">Contest Sponsor</h1>
-                  
+                    <h1 class="h3 mb-2 text-gray-800">List of Sponsors</h1>
+                    
+                    
+                    <form method="get">  
+                      
+                      <div class="row">
+                      <div class="col-lg-3 pull-right">  
+                      <input type="text" name="searchname" class="form-control"id="searchname"placeholder="Amazon Online" value="{{st}}"/>
+                      </div>
+                        <div class="col-lg-3 pull-right">
+                      <input type="submit" value="Go!" class="btn btn-primary"/>
+                      </div></div>
+                      </form>
                     <div class="card shadow mb-4">
                         
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'editsponcer' id=0 %}" class="m-0 font-weight-bold text-primary">Add New Sponsor</a></h6> 
-                        </div>
+                          <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'create-contest-sponsor' id=0 %}" class="m-0 font-weight-bold text-primary">Add New Sponsor</a></h6> 
+                          </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -19,12 +30,13 @@
                                             <th>Location</th>
                                             <th>Contest</th>
                                             <th>Contact Person</th>
-                                            <th>Status</th>
+                                            
                                             <th>Edit</th>
                                             
                                         </tr>
                                     </thead>
                                     <tbody>
+                                      
                                         {% for p in sponsordata %}
                                         <tr>
                                             <td>{{ sponsordata.start_index|add:forloop.counter0 }}</td>
@@ -32,13 +44,14 @@
                                             <td>{{p.brand_name}}</br>
                                                 {{p.online_presense}}/{{p.offline_presense}}
                                             </td>
-                                            <td>{{p.address}}</td>
-                                            <td>8/8</td>
+                                            <td>{{p.address}}</br><img src="/static/assets/img/istockphoto-519611160-612x612.jpg" width="25" height="20"></img></td>
+                                           
+                                            <td>{% for a in datacon %}{% if p.id == a.sponsor_id%}<a href="#">{{ a.count }}</a>{%endif%}{% endfor %}/{{ dt.count }}</td>
                                             <td>{{p.person_name}}</br>
                                               {{p.person_mobile}}
                                             </td>
-                                            <td>{{p.status}}</td> 
-                                            <td><a href="{% url 'editsponcer' p.id %}">Edit</td>
+                                             
+                                            <td><a href="{% url 'create-contest-sponsor' p.id %}"><i class="fa fa-eye fa-lg "style="color:yellowgreen" ></i></td>
                                         </tr>
                                         {%endfor%}
                                     </tbody>
@@ -64,7 +77,7 @@
                         <nav aria-label="Page navigation example">
                           <ul class="pagination">
                             {% if sponsordata.has_previous %}
-                              <li><a href="?page={{ sponsordata.previous_page_number }}" class="page-link">&laquo;</a></li>
+                              <li><a href="?page={{ sponsordata.previous_page_number }}&searchname={{st}}" class="page-link">&laquo;</a></li>
                             {% else %}
                               <li class="disabled"><span>&laquo;</span></li>
                             {% endif %}
@@ -72,11 +85,11 @@
                               {% if sponsordata.number == i %}
                                 <li class="active"><span class="page-link">{{ i }}</span></li>
                               {% else %}
-                                <li><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                                <li><a href="?page={{ i }}&searchname={{st}}" class="page-link">{{ i }} </a></li>
                               {% endif %}
                             {% endfor %}
                             {% if pre.has_next %}
-                              <li><a href="?page={{ sponsordata.next_page_number }}" class="page-link">&raquo;</a></li>
+                              <li><a href="?page={{ sponsordata.next_page_number }}&searchname={{st}}" class="page-link">&raquo;</a></li>
                             {% else %}
                               <li class="disabled"><span>&raquo;</span></li>
                             {% endif %}

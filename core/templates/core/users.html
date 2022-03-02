@@ -83,7 +83,7 @@
                                             <td>
                                               <!-- {%if p.is_user_verified %}<input type="button" value="Verified">{% else %}<input type="button" value="Not Verified">{%endif%} -->
                                             
-                                              <a href="#" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" name="is_user_verified" class="btn btn-success" name="is_user_verified" value="Verified">{% else %}<input type="button" class="btn btn btn-danger" name="is_user_verified"  value="Not Verified">{%endif%} </a>
+                                              <a href="#" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" name="is_user_verified" class="btn btn-success" name="is_user_verified" value="Verified"  >{% else %}<input type="button" class="btn btn btn-danger" name="is_user_verified"  value="Not Verified">{%endif%} </a>
                                                 
                                               <div class="container">
                                                 <!-- <h2>Modal Example</h2> -->
@@ -131,13 +131,16 @@
                                               <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
                                               <p style="position:relative;">{{p.mobile_no}}</p></td>
 
-                                            <td>{% if p.user_status == 0 %}<i class="fa fa-unlock fa-lg" style="color:green">Activated</i>{%else%}<i class="fa fa-lock fa-lg" style="color:red">Blocked</i>{%endif%}</td>
+                                            <td>{% if p.user_status == 0 %}<i class="fa fa-unlock fa-lg" style="color:green">&nbsp;Activated</i>{%else%}<i class="fa fa-lock fa-lg" style="color:red">&nbsp;Blocked</i>{%endif%}</td>
                                             <td>{{p.created_at}}</td>
                                             <td>
+
                                               {% if p.user_status == 0 %}
-                                              <a class="view" href="{% url 'pyfuser_edit' p.id %}"><i class="fa fa-eye fa-lg"></i><a herf="#" id="myInput2" value="ac" class="status_change_button" onclick="statusChange($(this))"><i class="fa fa-ban"></i>Blocked</a>
+                                              
+                                              <a class="view" href="{% url 'pyfuser_edit' p.id %}" ><a herf="#" id="ownInput1" value="Are you sure want to Blocked this User" class="status_change_button"  onclick="statusChange($(this))">&nbsp;<i class="fa fa-eye fa-lg"></i>&nbsp;&nbsp;<i class="fa fa-ban"></i>&nbsp;&nbsp;Blocked</a>
                                               {%elif p.user_status == 1 %}
-                                              <a href="{% url 'pyfuser_edit' p.id %}"><i class="fa fa-eye fa-lg"></i><a herf="#" id="myInput2" value="ab" class="status_change_button" onclick="statusChange($(this))"><i class="fa fa-unlock fa-lg"></i>Activate</a>
+                                              
+                                              <a href="{% url 'pyfuser_edit' p.id %}"><a herf="#" id="ownInput2" value="Are you sure want to Activate this User" class="status_change_button" onclick="statusChange($(this))">&nbsp;<i class="fa fa-eye fa-lg"></i>&nbsp;&nbsp;<i class="fa fa-unlock fa-lg" ></i>&nbsp;&nbsp;Activate</a>
                                             {%endif%}
                                             </td>
                                             
@@ -199,16 +202,17 @@
 
 
 
+
+
  function statusChange(event) {
-  var bla = $('#myInput2').val();
-  alert(bla)
-  // if(btnvl == 'ac'){
-  //   alert('Are you sure want to Blocked this User?')
-  // }else{
-  //   alert('Are you sure want to Activate this User?')
-  // }
+  console.log(event)
+  var element =event[0].attributes.value.value
+  alert(element)
+
   
-   console.log('event', event);
+    var a=$("#ownInput1").val();
+  //alert(a)
+    console.log('event', event);
     thisObj = event;
     trObj = thisObj.closest('tr');
     userId = trObj.find('td:last').text();
@@ -236,24 +240,5 @@ var mask = '<span style="position:absolute; top:0; left:0; background-color:whit
 
 $("p").append(mask);
   </script>
-
-<!-- <script>
-$(".send_mail_verification").on("click", function() {
-            // console.log(e);
-            console.log("open modal");
-            console.log("url", $(this).attr("data-target"));
-            $('#exampleModalToggle').modal('show');
-            deleteUrl = $(this).attr("data-url")
-            $('#entry-all-manual-btn-success').on("click", function(){
-                // console.log("Btn success for deletion...");
-                    $.ajax({
-                        url: deleteUrl,
-                        success: function(){
-                            location.reload()
-                        }
-                    });
-            });
-        });
-</script> -->
 
 {% endblock javascripts %}
