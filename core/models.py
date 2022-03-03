@@ -54,7 +54,7 @@ class contest_price_list(models.Model):
 
 class contest_category(models.Model):
     id=models.AutoField(primary_key=True)
-    parent_id=models.IntegerField()
+    parent_id=models.IntegerField(default=None,null=True)
     name=models.CharField(max_length=255)
     slug=models.CharField(max_length=255)
     color=models.CharField(max_length=255, null=True)

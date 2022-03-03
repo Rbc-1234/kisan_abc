@@ -2,21 +2,26 @@
 {% block content %}
 <table class="table">
  
-    <tbody>
-        
-    
+  <tbody>
+      
+      
+  <tr>
+      <td>{{content}}</td>
+  </tr>
+  
+  
+  
+  <tr>
+      <td>Your verification code is - {{list_for_random|random }}</td>
+    </tr>
+  <!-- <tr>
+      <td>{{list_for_random|random }}</td>
+    </tr> -->
     
     <tr>
-        <td>Your verification code is - {{list_for_random|random }}</td>
-      </tr>
-    <!-- <tr>
-        <td>{{list_for_random|random }}</td>
-      </tr> -->
-      
-      <tr>
-        <td></td>
-      </tr>
-      
-    </tbody>
-  </table>
+      <td></td>
+    </tr>
+    
+  </tbody>
+</table>
   {% endblock content %}

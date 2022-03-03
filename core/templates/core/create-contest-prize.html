@@ -23,7 +23,7 @@
                                         {%csrf_token%}
                                         <div class="form-group">
                                             Prize Name  
-                                            <input type="text" name="price_name" class="form-control" placeholder="Recharge Coupons" value="{% if pre.price_name %} {{pre.price_name}} {% endif %}"
+                                            <input type="text" name="price_name" class="form-control" placeholder="Enter Prize Name" value="{% if pre.price_name %} {{pre.price_name}} {% endif %}"
                                                 id="exampleInputEmail">
                                         </div>
                                         <!-- <div class="form-group">
@@ -32,7 +32,7 @@
                                             <input type="radio"  name="status" value="Inactive" {% if pre.status == 'Inactive' %} checked {% endif %}/> Inactive
                                         </div> -->
                                 
-                                        <input type="submit" value="Add a New Category" class="btn btn-primary btn-block">
+                                        <input type="submit" value="Create" class="btn btn-primary btn-block">
                                       
                                     </form>
                                 </div>

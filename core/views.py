@@ -11,6 +11,9 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Q
 from django.db.models import Count
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
 # Create your views here.
 
 class Home(View):
@@ -244,14 +247,16 @@ class Contestcategory_edit(View):
     def get(self,requests,id):
         if(id==0):
             form=Contestcategory_Form()
-            return render(requests,'core/create-contest-category.html',{'form':form})
+            concat=contest_category.objects.all()
+            return render(requests,'core/create-contest-category.html',{'form':form,'concats':concat})
         else:
-            data=contest_category.objects.get(id=id)
-            form=Contestcategory_Form(instance=data)
-            return render(requests,'core/create-contest-category.html',{'form':form,'data':data})
+            concat=contest_category.objects.get(id=id)
+            form=Contestcategory_Form(instance=concat)
+            return render(requests,'core/create-contest-category.html',{'form':form,'concats':concat})
 
     def post(self,requests,id):
         if(id==0):
+            concat=contest_category.objects.all()
             form=Contestcategory_Form(requests.POST)
             if requests.method =="POST":
                 masterstatus=requests.POST.get('masterstatus')
@@ -260,6 +265,7 @@ class Contestcategory_edit(View):
                 form.save()
                 return redirect("/view-category")
             else:
+                concat=contest_category.objects.all()
                 name = requests.POST['name']
                 slug = requests.POST['slug']
                 color = requests.POST['color']
@@ -267,15 +273,15 @@ class Contestcategory_edit(View):
                 description = requests.POST['description']
                 obj = contest_category(name=name,slug=slug,color=color,parent_id=parent_id,description=description)
                 form=Contestcategory_Form(requests.POST, instance=obj)
-                return render(requests,'core/create-contest-category.html',{'form':form,'obj':obj})
+                return render(requests,'core/create-contest-category.html',{'form':form,'obj':obj,'concats':concat})
         else:
-            data=contest_category.objects.get(id=id)
-            form=Contestcategory_Form(requests.POST,instance=data)
+            concat=contest_category.objects.get(id=id)
+            form=Contestcategory_Form(requests.POST,instance=concat)
             if form.is_valid():
                 form.save()
                 return redirect('/view-category')
             else:
-                return render(requests,'core/create-contest-category.html',{'form':form})
+                return render(requests,'core/create-contest-category.html',{'form':form,'concats':concat})
 
 
 class Sponcer_Home(View):
@@ -595,16 +601,32 @@ class Reachus_home_form(View):
 def form(request):
     if request.method =="POST":
         list_for_random = range(100000)
-        to=request.POST.get('csrfmiddlewaretoken')
-        
-        html_content=render_to_string("core/main.html",{'list_for_random':list_for_random})
+        to=request.POST.get('toemail')
+        content=request.POST.get('content')
+        html_content=render_to_string("core/main.html",{'list_for_random':list_for_random, 'content':content})
         text_content=strip_tags(html_content)
         email=EmailMultiAlternatives("testing",text_content,settings.EMAIL_HOST_USER,[to])
         email.attach_alternative(html_content,"text/html")
         email.send()
-        return redirect('/pyf_user')
+        success_message = 'Mail is sent'
+        return redirect('/home2')
+    else:
+        success_message = 'Mail is sent'
+        return render(request,'core/home2.html')
 
-
+# def form(request):
+#     if request.method == "POST":
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#             mail = form.cleaned_data["from_email"]
+#             subject = form.cleaned_data["subject"]
+#             message = form.cleaned_data["message"]
+#             send_mail(subject, message, mail, ["example@gmail.com"], fail_silently=False)
+#             messages.success("Done")
+#             return redirect('/pyf_user')
+#     else:
+#         form = ContactForm()
+#     return render(request, "core/pyf_user.html", {"form": form})
 
 
 
@@ -659,6 +681,9 @@ def statusChangeUsers(request):
     except Exception as e:
         # print(e)
         return JsonResponse({'message':'failed'}, status=500)
+
+
+
 
 
 

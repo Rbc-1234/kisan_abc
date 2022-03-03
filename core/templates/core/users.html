@@ -83,7 +83,7 @@
                                             <td>
                                               <!-- {%if p.is_user_verified %}<input type="button" value="Verified">{% else %}<input type="button" value="Not Verified">{%endif%} -->
                                             
-                                              <a href="#" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" name="is_user_verified" class="btn btn-success" name="is_user_verified" value="Verified"  >{% else %}<input type="button" class="btn btn btn-danger" name="is_user_verified"  value="Not Verified">{%endif%} </a>
+                                              <a href="#contactModal" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" name="is_user_verified" class="btn btn-success" name="is_user_verified" value="Verified"  >{% else %}<input type="button" class="btn btn btn-danger" name="is_user_verified"  value="Not Verified">{%endif%} </a>
                                                 
                                               <div class="container">
                                                 <!-- <h2>Modal Example</h2> -->
@@ -106,13 +106,14 @@
                                                         <strong>User Email:</strong> {{p.email}}
 
                                                         {%else%}
-                                                        <strong>User Email:</strong> 
+                                                        {% include 'core/home2.html' %}
+                                                        <!-- <strong>User Email:</strong> 
                                                         <form method="POST" >
                                                           {% csrf_token %}
                                                         {{p.email}}
                                                         
                                                       </br></br>
-                                                        <strong>Send Verification Email:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="submit" value="submit" class="btn btn-primary">
+                                                        <strong>Send Verification Email:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="submit" value="submit" class="btn btn-primary"> -->
                                                        {%endif%}
                                                       </form>
                                                        </div>
@@ -137,10 +138,10 @@
 
                                               {% if p.user_status == 0 %}
                                               
-                                              <a class="view" href="{% url 'pyfuser_edit' p.id %}" ><a herf="#" id="ownInput1" value="Are you sure want to Blocked this User" class="status_change_button"  onclick="statusChange($(this))">&nbsp;<i class="fa fa-eye fa-lg"></i>&nbsp;&nbsp;<i class="fa fa-ban"></i>&nbsp;&nbsp;Blocked</a>
+                                              <a class="view" href="{% url 'pyfuser_edit' p.id %}" >&nbsp;<i class="fa fa-eye fa-lg"></i><a herf="#" id="ownInput1" value="Are you sure want to Blocked this User" class="status_change_button"  onclick="statusChange($(this))"></i>&nbsp;&nbsp;<i class="fa fa-ban"></i>&nbsp;&nbsp;Blocked</a>
                                               {%elif p.user_status == 1 %}
                                               
-                                              <a href="{% url 'pyfuser_edit' p.id %}"><a herf="#" id="ownInput2" value="Are you sure want to Activate this User" class="status_change_button" onclick="statusChange($(this))">&nbsp;<i class="fa fa-eye fa-lg"></i>&nbsp;&nbsp;<i class="fa fa-unlock fa-lg" ></i>&nbsp;&nbsp;Activate</a>
+                                              <a href="{% url 'pyfuser_edit' p.id %}">&nbsp;<i class="fa fa-eye fa-lg"></i><a herf="#" id="ownInput2" value="Are you sure want to Activate this User" class="status_change_button" onclick="statusChange($(this))">&nbsp;&nbsp;<i class="fa fa-unlock fa-lg" ></i>&nbsp;&nbsp;Activate</a>
                                             {%endif%}
                                             </td>
                                             
