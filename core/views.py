@@ -14,6 +14,7 @@ from django.db.models import Count
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
+
 # Create your views here.
 
 class Home(View):
@@ -608,11 +609,8 @@ def form(request):
         email=EmailMultiAlternatives("testing",text_content,settings.EMAIL_HOST_USER,[to])
         email.attach_alternative(html_content,"text/html")
         email.send()
-        success_message = 'Mail is sent'
-        return redirect('/home2')
-    else:
-        success_message = 'Mail is sent'
-        return render(request,'core/home2.html')
+        return redirect('/users')
+        # return JsonResponse({'message':'mail sent'}, status=200)
 
 # def form(request):
 #     if request.method == "POST":
